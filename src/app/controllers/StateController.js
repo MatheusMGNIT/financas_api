@@ -2,7 +2,9 @@ const State = require("../models/State");
 
 module.exports = {
   async getStates(req, res) {
-    const state = await State.findAll();
+    const state = await State.findAll({
+      attributes: ["id", "name"],
+    });
     return res.json(state);
   },
   async insertState(req, res) {

@@ -1,4 +1,5 @@
 const express = require("express");
+const Auth = require("./middlewares/Auth");
 
 const StateController = require("./app/controllers/StateController");
 
