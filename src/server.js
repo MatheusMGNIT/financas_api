@@ -8,4 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(routes);
 
-app.listen(3001);
+const port = 3001;
+
+app.listen(port, () => {
+  console.log(`Running server on localhost:${port}...`);
+});
