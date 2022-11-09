@@ -1,10 +1,9 @@
 const { validationResult, matchedData } = require("express-validator");
+const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
-const User = require("../models/User");
-
 module.exports = {
-  createUser: async (req, res) => {
+  login: async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.json({ error: errors.mapped() });
@@ -18,28 +17,22 @@ module.exports = {
       },
     });
 
-    if (user) {
-      res.json({
-        error: { email: { mgs: "E-mail já existe" } },
-      });
+    if (!user) {
+      res.json({ error: "E-mail e/ou senha errados!" });
       return;
     }
-
-    const passwordHash = await bcrypt.hash(data.password, 10);
+    const match = await bcrypt.compare(data.password, user.password_hash);
+    if (!match) {
+      res.json({ error: "E-mail e/ou senha errados!" });
+      return;
+    }
 
     const payload = (Date.now() + Math.random()).toString();
     const token = await bcrypt.hash(payload, 10);
 
-    const newUser = User.create({
-      name: data.name,
-      email: data.email,
-      password_hash: passwordHash,
-      token,
-      state: data.state,
-    });
+    user.token = token;
+    await user.save();
 
-    (await newUser).save;
-
-    res.json({ token });
+    res.json({ token, email: data.email });
   },
 };
