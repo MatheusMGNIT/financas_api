@@ -6,7 +6,7 @@ module.exports = {
   login: async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.json({ error: errors.mapped() });
+      res.status(400).json({ error: errors.mapped() });
       return;
     }
     const data = matchedData(req);
@@ -18,12 +18,12 @@ module.exports = {
     });
 
     if (!user) {
-      res.json({ error: "E-mail e/ou senha errados!" });
+      res.status(400).json({ error: "E-mail e/ou senha errados!" });
       return;
     }
     const match = await bcrypt.compare(data.password, user.password_hash);
     if (!match) {
-      res.json({ error: "E-mail e/ou senha errados!" });
+      res.status(400).json({ error: "E-mail e/ou senha errados!" });
       return;
     }
 
@@ -33,6 +33,6 @@ module.exports = {
     user.token = token;
     await user.save();
 
-    res.json({ token, email: data.email });
+    return res.status(200).json({ token, email: data.email });
   },
 };
