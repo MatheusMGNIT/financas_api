@@ -18,12 +18,12 @@ module.exports = {
     });
 
     if (!user) {
-      res.status(400).json({ error: "E-mail e/ou senha errados!" });
+      res.status(400).json({ msg: "E-mail e/ou senha errados!" });
       return;
     }
     const match = await bcrypt.compare(data.password, user.password_hash);
     if (!match) {
-      res.status(400).json({ error: "E-mail e/ou senha errados!" });
+      res.status(400).json({ msg: "E-mail e/ou senha errados!" });
       return;
     }
 
