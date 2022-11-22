@@ -22,7 +22,14 @@ module.exports = checkSchema({
     errorMessage: "Senha precisa ter pelo menos 2 caracteres",
   },
   state: {
-    notEmpty: true,
-    errorMessage: "Estado não Selecionado",
+    isInt: true,
+    custom: {
+      options: async (value) => {
+        if (value == -1) {
+          return Promise.reject(new Error("Selecione um Estado"));
+        }
+        return true;
+      },
+    },
   },
 });
