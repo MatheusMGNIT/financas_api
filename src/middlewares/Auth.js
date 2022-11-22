@@ -14,7 +14,7 @@ module.exports = {
       token = req.body.token;
     }
     if (token == "") {
-      return res.json({ notallowed: true });
+      return res.json({ msg: "Precisa está logado no Sistema" });
     }
 
     const user = await User.findOne({ token });

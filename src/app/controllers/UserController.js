@@ -42,4 +42,41 @@ module.exports = {
 
     res.status(200).json({ token });
   },
+
+  getUsers: async (req, res) => {
+    const users = await User.findAll({
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
+
+    try {
+      return res.status(200).json(users);
+    } catch (err) {
+      return res.status(400).json({ msg: ` Usuários não encontrados .${err}` });
+    }
+  },
+
+  getUser: async (req, res) => {
+    const { id } = req.params;
+
+    const user = await User.findOne({
+      where: {
+        id: id,
+      },
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
+
+    if (user === null) {
+      return res.status(200).json({ msg: `Usuário não encontrado.` });
+    }
+
+    try {
+      return res.status(200).json(user);
+    } catch (err) {
+      return res.status(400).json({ msg: `Usuário não encontrado. ${err}` });
+    }
+  },
 };
