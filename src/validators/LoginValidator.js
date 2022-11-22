@@ -4,14 +4,18 @@ module.exports = checkSchema({
   email: {
     isEmail: true,
     normalizeEmail: true,
-    errorMessage: "E-mail Inválido",
+    errorMessage: "Insira um email válido",
   },
   password: {
+    isString: true,
+    notEmpty: { 
+      bail: true
+    },
     isLength: {
       options: {
         min: 2,
       },
-      errorMessage: "Senha precisa ter pelo menos 2 caracteres",
     },
+    errorMessage: "Insira uma senha válida",
   },
 });

@@ -3,28 +3,21 @@ const { checkSchema } = require("express-validator");
 module.exports = checkSchema({
   name: {
     trim: true,
-    isLength: {
-      options: { min: 2 },
+    isString: true,
+    notEmpty: { 
+      bail: true,
     },
-    errorMessage: "Nome precisa ter pelo menos 2 caracteres",
+    errorMessage: "Insira um nome válido",
+    isLength: {
+      options: { min: 3 },
+      errorMessage: "Usuario precisa ter pelo menos 2 caracteres",
+    },
   },
   email: {
     isEmail: true,
     normalizeEmail: true,
-    errorMessage: "E-mail Inválido",
+    errorMessage: "Insira um email válido",
   },
-  // password: {
-  //   isLength: {
-  //     options: {
-  //       min: 2,
-  //     },
-  //   },
-  //   errorMessage: "Senha precisa ter pelo menos 2 caracteres",
-  // },
-  // state: {
-  //   notEmpty: true,
-  //   errorMessage: "Estado não Selecionado",
-  // },
   password: {
     notEmpty: {
       bail: true,
@@ -46,6 +39,17 @@ module.exports = checkSchema({
       options: (value, { req }) => {
         if (value !== req.body.password) {
           return Promise.reject(new Error('As senhas não coincidem'));
+        }
+        return true;
+      },
+    },
+  },
+  state: {
+    isInt: true,
+    custom: {
+      options: async (value) => {
+        if (value == -1) {
+          return Promise.reject(new Error("Selecione um estado válido"));
         }
         return true;
       },
