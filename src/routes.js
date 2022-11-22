@@ -10,9 +10,13 @@ const AuthController = require("./app/controllers/AuthController");
 
 const routes = express.Router();
 
-routes.get("/", (req, res) => {});
 routes.get("/states", StateController.getStates);
-routes.post("/signup", SignupValidator, UserController.createUser);
+routes.post(
+  "/signup",
+  SignupValidator,
+  validationHandler,
+  UserController.createUser
+);
 routes.post("/signin", LoginValidator, validationHandler, AuthController.login);
 
 module.exports = routes;

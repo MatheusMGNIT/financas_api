@@ -23,6 +23,6 @@ module.exports = checkSchema({
   },
   state: {
     notEmpty: true,
-    errorMessage: "Estado não preenchido",
+    errorMessage: "Estado não Selecionado",
   },
 });
