@@ -24,6 +24,12 @@ module.exports = {
       token: {
         type: Sequelize.STRING,
       },
+      created_at: {
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+      },
     });
   },
 

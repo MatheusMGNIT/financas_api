@@ -1,0 +1,18 @@
+  yarn sequelize db:migrate                      Run pending migrations
+  yarn sequelize                                 Update migration table to have
+  db:migrate:schema:timestamps:add          timestamps
+  yarn sequelize db:migrate:status               List the status of all migrations
+  yarn sequelize db:migrate:undo  --name (nome migrate)            Reverts a migration
+  yarn sequelize db:migrate:undo:all             Revert all migrations ran
+  yarn sequelize db:seed  --seed (nome seed)                       Run specified seeder
+  yarn sequelize db:seed:undo   Deletes data from the database
+  yarn sequelize db:seed:all                     Run every seeder
+  yarn sequelize db:seed:undo:all                Deletes data from the database
+
+  yarn sequelize migration:generate  --name (nome migrate)  Generates a new migration file
+  yarn sequelize migration:create                Generates a new migration file
+  yarn sequelize model:generate                  Generates a model and its migration
+  yarn sequelize model:create                    Generates a model and its migration
+  yarn sequelize seed:generate                   Generates a new seed file
+  yarn sequelize seed:create 
+
