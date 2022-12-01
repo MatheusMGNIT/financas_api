@@ -11,6 +11,8 @@ module.exports = {
     }
     const data = matchedData(req);
 
+    console.log(data);
+
     const user = await User.findOne({
       where: {
         email: data.email,
@@ -33,6 +35,6 @@ module.exports = {
     user.token = token;
     await user.save();
 
-    return res.status(200).json({ token, email: data.email });
+    return res.json({ token, email: data.email });
   },
 };

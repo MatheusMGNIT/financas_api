@@ -2,17 +2,15 @@ const User = require("../app/models/User");
 
 module.exports = {
   private: async (req, res, next) => {
-    if (!req.query.token && !req.body.token) {
+    if (!req.headers.authorization) {
     }
 
     let token = "";
 
-    if (req.query.token) {
-      token = req.query.token;
+    if (req.headers.authorization) {
+      token = req.headers.authorization;
     }
-    if (req.body.token) {
-      token = req.body.token;
-    }
+
     if (token == "") {
       return res.json({ msg: "Precisa está logado no Sistema" });
     }

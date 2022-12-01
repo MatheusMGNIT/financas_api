@@ -6,8 +6,8 @@ module.exports = {
 
     try {
       return res.status(200).json(state);
-    } catch(err) {
-      return res.status(400).json({ msg: `Erro ao carregar dados. ${err}` })
+    } catch (err) {
+      return res.status(400).json({ msg: `Erro ao carregar dados. ${err}` });
     }
   },
 
@@ -17,7 +17,7 @@ module.exports = {
 
     try {
       return res.status(200).json(state);
-    } catch(err) {
+    } catch (err) {
       return res.status(400).json({ msg: `Erro ao fazer cadastro. ${err}` });
     }
   },
