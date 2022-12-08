@@ -33,16 +33,19 @@ class User extends Model {
         last_name: {
           type: DataTypes.STRING,
         },
+        phone: {
+          type: DataTypes.STRING,
+        },
+        phone_type: {
+          type: DataTypes.INTEGER,
+        },
         cpf: {
           type: DataTypes.STRING,
         },
         cnpj: {
           type: DataTypes.STRING,
         },
-        phone: {
-          type: DataTypes.STRING,
-        },
-        phone_type: {
+        person_type: {
           type: DataTypes.INTEGER,
         },
       },

@@ -8,13 +8,28 @@ module.exports = {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400).json({ error: errors.mapped() });
-      return;
+      // return;
     }
+
+    const {
+      user_type,
+      name,
+      last_name,
+      email,
+      state,
+      password,
+      confirmPassword,
+      cpf,
+      cnpj,
+      phone_type,
+      phone,
+      person_type,
+    } = req.body;
     const data = matchedData(req);
 
     const user = await User.findOne({
       where: {
-        email: data.email,
+        email: email,
       },
     });
 
@@ -31,11 +46,18 @@ module.exports = {
     const token = await bcrypt.hash(payload, 10);
 
     const newUser = User.create({
-      name: data.name,
-      email: data.email,
+      name: name,
+      last_name: last_name,
+      email: email,
       password_hash: passwordHash,
       token,
-      state: data.state,
+      state: state,
+      id_user_type: user_type,
+      cpf: cpf,
+      cnpj: cnpj,
+      phone: phone,
+      phone_type: phone_type,
+      person_type: person_type,
     });
 
     (await newUser).save;

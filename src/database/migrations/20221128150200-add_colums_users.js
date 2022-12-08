@@ -19,6 +19,9 @@ module.exports = {
       queryInterface.addColumn("users", "phone_type", {
         type: Sequelize.INTEGER,
       }),
+      queryInterface.addColumn("users", "person_type", {
+        type: Sequelize.INTEGER,
+      }),
     ]);
   },
 
@@ -30,6 +33,7 @@ module.exports = {
       queryInterface.removeColumn("users", "cnpj"),
       queryInterface.removeColumn("users", "phone"),
       queryInterface.removeColumn("users", "phone_type"),
+      queryInterface.removeColumn("users", "person_type"),
     ]);
   },
 };
