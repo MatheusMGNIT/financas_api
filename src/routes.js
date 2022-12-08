@@ -7,11 +7,13 @@ const LoginValidator = require("./validators/LoginValidator");
 const SignupValidator = require("./validators/SignupValidator");
 const UserController = require("./app/controllers/UserController");
 const AuthController = require("./app/controllers/AuthController");
+const UserTypeController = require("./app/controllers/UserTypeController");
 
 const routes = express.Router();
 
 // ROUTES WITHOUT AUTH
 routes.get("/states", StateController.getStates);
+routes.get("/user-types", UserTypeController.getUserTypes);
 routes.post(
   "/signup",
   SignupValidator,

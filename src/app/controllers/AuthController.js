@@ -11,8 +11,6 @@ module.exports = {
     }
     const data = matchedData(req);
 
-    console.log(data);
-
     const user = await User.findOne({
       where: {
         email: data.email,
