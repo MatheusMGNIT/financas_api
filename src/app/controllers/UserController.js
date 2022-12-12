@@ -75,8 +75,6 @@ module.exports = {
       last_name,
       email,
       state,
-      password,
-      confirmPassword,
       cpf,
       cnpj,
       phone_type,
@@ -88,14 +86,12 @@ module.exports = {
       where: {
         id: id,
       },
-      include: [{ model: UserType }],
     });
 
     if (user != null) {
       // SE NAO FOR ADMIN
-      if (req.user_type !== -1) {
+      if (user_type !== 1) {
         await user.update({
-          user_type,
           name,
           last_name,
           email,
@@ -108,7 +104,6 @@ module.exports = {
         });
         user = await User.findOne({
           where: { id: id },
-          include: [{ model: UserType }],
           attributes: { exclude: ["password_hash"] },
         });
         return res.status(200).json(user);
@@ -171,7 +166,7 @@ module.exports = {
     }
   },
 
-  async delete(req, res) {
+  async deleteUser(req, res) {
     const { id } = req.params;
     const user = await User.findOne({ where: { id: id } });
     if (user != null) {
