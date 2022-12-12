@@ -2,6 +2,7 @@ const { validationResult, matchedData } = require("express-validator");
 const bcrypt = require("bcrypt");
 
 const User = require("../models/User");
+const UserType = require("../models/UserType");
 
 module.exports = {
   createUser: async (req, res) => {
@@ -65,6 +66,74 @@ module.exports = {
     res.status(200).json({ token });
   },
 
+  updateUser: async (req, res) => {
+    const { id } = req.params;
+
+    const {
+      user_type,
+      name,
+      last_name,
+      email,
+      state,
+      password,
+      confirmPassword,
+      cpf,
+      cnpj,
+      phone_type,
+      phone,
+      person_type,
+    } = req.body;
+
+    let user = await User.findOne({
+      where: {
+        id: id,
+      },
+      include: [{ model: UserType }],
+    });
+
+    if (user != null) {
+      // SE NAO FOR ADMIN
+      if (req.user_type !== -1) {
+        await user.update({
+          user_type,
+          name,
+          last_name,
+          email,
+          state,
+          cpf,
+          cnpj,
+          phone_type,
+          phone,
+          person_type,
+        });
+        user = await User.findOne({
+          where: { id: id },
+          include: [{ model: UserType }],
+          attributes: { exclude: ["password_hash"] },
+        });
+        return res.status(200).json(user);
+      }
+      // SE FOR ADMIN
+      await user.update({
+        user_type,
+        name,
+        last_name,
+        email,
+        state,
+        cpf,
+        cnpj,
+        phone_type,
+        phone,
+        person_type,
+      });
+      user = await User.findOne({ where: { id: id } });
+      return res.status(200).json({
+        user,
+      });
+    }
+    return res.status(404).json({ msg: "Usuário nao encontrado." });
+  },
+
   getUsers: async (req, res) => {
     const users = await User.findAll({
       attributes: {
@@ -100,5 +169,19 @@ module.exports = {
     } catch (err) {
       return res.status(400).json({ msg: `Usuário não encontrado. ${err}` });
     }
+  },
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const user = await User.findOne({ where: { id: id } });
+    if (user != null) {
+      await user.destroy({
+        where: { id },
+        include: [{ model: UserType }],
+        attributes: { exclude: ["password_hash"] },
+      });
+      return res.status(200).json(user);
+    }
+    return res.status(404).json({ msg: "Usuário nao encontrado." });
   },
 };
