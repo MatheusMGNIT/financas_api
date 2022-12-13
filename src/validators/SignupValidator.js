@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 const User = require("../app/models/User");
 
 module.exports = checkSchema({
-  user_type: {
+  id_user_type: {
     isInt: true,
     custom: {
       options: async (value) => {

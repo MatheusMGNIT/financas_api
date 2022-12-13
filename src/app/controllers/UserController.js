@@ -70,7 +70,7 @@ module.exports = {
     const { id } = req.params;
 
     const {
-      user_type,
+      id_user_type,
       name,
       last_name,
       email,
@@ -90,7 +90,7 @@ module.exports = {
 
     if (user != null) {
       // SE NAO FOR ADMIN
-      if (user_type !== 1) {
+      if (id_user_type !== 1) {
         await user.update({
           name,
           last_name,
@@ -110,7 +110,7 @@ module.exports = {
       }
       // SE FOR ADMIN
       await user.update({
-        user_type,
+        id_user_type,
         name,
         last_name,
         email,
