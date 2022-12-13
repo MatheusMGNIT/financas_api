@@ -1,7 +1,7 @@
 const { checkSchema } = require("express-validator");
 
 module.exports = checkSchema({
-  user_type: {
+  id_user_type: {
     optional: true,
     isInt: true,
     custom: {

@@ -13,7 +13,7 @@ module.exports = {
     }
 
     const {
-      user_type,
+      id_user_type,
       name,
       last_name,
       email,
@@ -53,7 +53,7 @@ module.exports = {
       password_hash: passwordHash,
       token,
       state: state,
-      id_user_type: user_type,
+      id_user_type,
       cpf: cpf,
       cnpj: cnpj,
       phone: phone,
@@ -89,25 +89,6 @@ module.exports = {
     });
 
     if (user != null) {
-      // SE NAO FOR ADMIN
-      if (id_user_type !== 1) {
-        await user.update({
-          name,
-          last_name,
-          email,
-          state,
-          cpf,
-          cnpj,
-          phone_type,
-          phone,
-          person_type,
-        });
-        user = await User.findOne({
-          where: { id: id },
-          attributes: { exclude: ["password_hash"] },
-        });
-        return res.status(200).json(user);
-      }
       // SE FOR ADMIN
       await user.update({
         id_user_type,

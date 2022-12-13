@@ -5,15 +5,16 @@ const User = require("../app/models/User");
 module.exports = checkSchema({
   id_user_type: {
     isInt: true,
+    errorMessage: "Selecione um tipo válido",
     custom: {
-      options: async (value) => {
-        if (value == -1) {
+      options: async (value, { req }) => {
+        console.log(req.body.user_type);
+        if (req.body.user_type === -1) {
           return Promise.reject(new Error("Selecione um Tipo válido "));
         }
         return true;
       },
     },
-    errorMessage: "Selecione um tipo válido",
   },
   name: {
     trim: true,
