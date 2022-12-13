@@ -11,6 +11,11 @@ const UserTypeController = require("./app/controllers/UserTypeController");
 const UserEditValidator = require("./validators/UserEditValidator");
 const BankController = require("./app/controllers/BankController");
 const BankValidator = require("./validators/BankValidator");
+const LaunchController = require("./app/controllers/LaunchController");
+const CategoryController = require("./app/controllers/CategoryController");
+const ClassificationController = require("./app/controllers/ClassificationController");
+const MovementController = require("./app/controllers/MovementController");
+const StatusLaunchController = require("./app/controllers/StatusLaunchController");
 
 const routes = express.Router();
 
@@ -44,10 +49,31 @@ routes.post(
 routes.put("/user/:id", Auth.private, UserController.updateUser);
 routes.delete("/user/:id", Auth.private, UserController.deleteUser);
 
+// LAUNCHS
+routes.get("/launchs", Auth.private, LaunchController.getLaunchs);
+
+// CATEGORYS
+routes.get("/categorys", Auth.private, CategoryController.getCategors);
+
+//CLASSIFICATIONS
+routes.get(
+  "/classifications",
+  Auth.private,
+  ClassificationController.getClassifications
+);
+// MOVEMENTS
+routes.get("/movements", Auth.private, MovementController.getMovements);
+
+//STATUS LAUNCHS
+routes.get(
+  "/status-launchs",
+  Auth.private,
+  StatusLaunchController.getStatusLaunchs
+);
+
 //BANK
 routes.get("/bank", Auth.private, BankController.getBanks);
 routes.get("/bank/:id", Auth.private, BankController.getBank);
-
 routes.post(
   "/bank",
   Auth.private,
