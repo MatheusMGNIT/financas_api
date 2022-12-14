@@ -13,6 +13,6 @@
   yarn sequelize migration:create                Generates a new migration file
   yarn sequelize model:generate                  Generates a model and its migration
   yarn sequelize model:create                    Generates a model and its migration
-  yarn sequelize seed:generate                   Generates a new seed file
+  yarn sequelize seed:generate --name (nome seed)           Generates a new seed file
   yarn sequelize seed:create 
 

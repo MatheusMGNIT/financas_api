@@ -16,6 +16,7 @@ module.exports = {
         email: data.email,
       },
     });
+    console.log(user.name);
 
     if (!user) {
       res.status(400).json({ msg: "E-mail e/ou senha errados!" });
@@ -33,6 +34,11 @@ module.exports = {
     user.token = token;
     await user.save();
 
-    return res.json({ token, email: data.email });
+    return res.json({
+      token,
+      email: user.email,
+      name: user.name,
+      last_name: user.last_name,
+    });
   },
 };
