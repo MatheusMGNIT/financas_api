@@ -79,7 +79,11 @@ routes.post(
   Auth.private,
   BankValidator,
   validationHandler,
+  BankValidator,
+  validationHandler,
   BankController.insertBank
 );
+routes.put("/bank/:id", Auth.private, BankController.updateBank);
+routes.delete("/bank/:id", Auth.private, BankController.deleteBank);
 
 module.exports = routes;
