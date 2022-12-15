@@ -45,7 +45,7 @@ module.exports = {
         return res.status(200).json(category);
       } catch (err) {
         return res
-          .status(200)
+          .status(400)
           .json({ msg: `Erro ao Atualizar Categoria ${err}` });
       }
     }
