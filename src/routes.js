@@ -17,6 +17,7 @@ const ClassificationController = require("./app/controllers/ClassificationContro
 const MovementController = require("./app/controllers/MovementController");
 const StatusLaunchController = require("./app/controllers/StatusLaunchController");
 const CategoryValidator = require("./validators/CategoryValidator");
+const LaunchValidator = require("./validators/LaunchValidator");
 
 const routes = express.Router();
 
@@ -100,5 +101,23 @@ routes.post(
 );
 routes.put("/category/:id", Auth.private, CategoryController.updateCategory);
 routes.delete("/category/:id", Auth.private, CategoryController.deleteCategory);
+
+//LAUNCH
+routes.get("/launch", Auth.private, LaunchController.getLaunchs);
+routes.get(
+  "/launch/:movement",
+  Auth.private,
+  LaunchController.getLaunchMovements
+);
+
+routes.post(
+  "/launch",
+  Auth.private,
+  LaunchValidator,
+  validationHandler,
+  LaunchController.insertLaunch
+);
+routes.put("/launc/:id", Auth.private, LaunchController.updateLaunch);
+routes.delete("/launch/:id", Auth.private, LaunchController.deleteLaunch);
 
 module.exports = routes;
