@@ -20,14 +20,14 @@ module.exports = {
   },
 
   getUserProfile: async (req, res) => {
-    const { uuid } = req.headers.token;
+    const uuid = req.headers.token;
 
     const user = await User.findOne({
       where: {
         token: uuid,
       },
       attributes: {
-        exclude: ["password_hash", "createdAt", "updatedAt"],
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
       },
     });
 

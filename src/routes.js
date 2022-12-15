@@ -38,7 +38,7 @@ routes.post("/signin", LoginValidator, validationHandler, AuthController.login);
 // ROUTES WITH AUTH
 // USERS
 routes.get("/users", Auth.private, UserController.getUsers);
-routes.get("/users/:uuid", Auth.private, UserController.getUserProfile);
+routes.get("/user-profile", Auth.private, UserController.getUserProfile);
 routes.get("/user/:id", Auth.private, UserController.getUser);
 routes.post(
   "/user",
