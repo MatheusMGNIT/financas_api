@@ -27,19 +27,7 @@ module.exports = checkSchema({
       errorMessage: "Usuario precisa ter pelo menos 2 caracteres",
     },
   },
-  last_name: {
-    optional: true,
-    trim: true,
-    isString: true,
-    notEmpty: {
-      bail: true,
-    },
-    errorMessage: "Insira um sobrenome válido",
-    isLength: {
-      options: { min: 3 },
-      errorMessage: "Usuario precisa ter pelo menos 2 caracteres",
-    },
-  },
+
   email: {
     optional: true,
     isEmail: true,
@@ -61,32 +49,6 @@ module.exports = checkSchema({
     },
   },
 
-  //   password: {
-  //     notEmpty: {
-  //       bail: true,
-  //     },
-  //     errorMessage: "Insira uma senha válida.",
-  //     isString: true,
-  //     isLength: {
-  //       options: [{ min: 5 }],
-  //       errorMessage: "Digite uma senha que contenha pelo menos 5 caracteres",
-  //     },
-  //   },
-  //   confirmPassword: {
-  //     notEmpty: {
-  //       bail: true,
-  //     },
-  //     isString: true,
-  //     errorMessage: "Insira uma senha válida.",
-  //     custom: {
-  //       options: (value, { req }) => {
-  //         if (value !== req.body.password) {
-  //           return Promise.reject(new Error("As senhas não coincidem"));
-  //         }
-  //         return true;
-  //       },
-  //     },
-  //   },
   state: {
     optional: true,
     isInt: true,
@@ -143,7 +105,6 @@ module.exports = checkSchema({
     errorMessage: "Digite um CPF válido",
     custom: {
       options: async (value, { req }) => {
-        console.log(req.body.cpf);
         if (
           (await User.findOne({
             where: {
@@ -166,7 +127,6 @@ module.exports = checkSchema({
     errorMessage: "Digite um CNPJválido",
     custom: {
       options: async (value, { req }) => {
-        console.log(req.body.cnpj);
         if (
           (await User.findOne({
             where: {
