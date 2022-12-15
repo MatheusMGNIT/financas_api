@@ -16,6 +16,7 @@ const CategoryController = require("./app/controllers/CategoryController");
 const ClassificationController = require("./app/controllers/ClassificationController");
 const MovementController = require("./app/controllers/MovementController");
 const StatusLaunchController = require("./app/controllers/StatusLaunchController");
+const CategoryValidator = require("./validators/CategoryValidator");
 
 const routes = express.Router();
 
@@ -86,5 +87,18 @@ routes.post(
 );
 routes.put("/bank/:id", Auth.private, BankController.updateBank);
 routes.delete("/bank/:id", Auth.private, BankController.deleteBank);
+
+//CATEGORY
+
+routes.get("/category", Auth.private, CategoryController.getCategors);
+routes.post(
+  "/category",
+  Auth.private,
+  CategoryValidator,
+  validationHandler,
+  CategoryController.insertCategory
+);
+routes.put("/category/:id", Auth.private, CategoryController.updateCategory);
+routes.delete("/category/:id", Auth.private, CategoryController.deleteCategory);
 
 module.exports = routes;

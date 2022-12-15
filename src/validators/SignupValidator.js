@@ -8,7 +8,6 @@ module.exports = checkSchema({
     errorMessage: "Selecione um tipo válido",
     custom: {
       options: async (value, { req }) => {
-        console.log(req.body.user_type);
         if (req.body.user_type === -1) {
           return Promise.reject(new Error("Selecione um Tipo válido "));
         }
@@ -28,18 +27,7 @@ module.exports = checkSchema({
       errorMessage: "Usuario precisa ter pelo menos 2 caracteres",
     },
   },
-  last_name: {
-    trim: true,
-    isString: true,
-    notEmpty: {
-      bail: true,
-    },
-    errorMessage: "Insira um sobrenome válido",
-    isLength: {
-      options: { min: 3 },
-      errorMessage: "Usuario precisa ter pelo menos 2 caracteres",
-    },
-  },
+
   email: {
     isEmail: true,
     normalizeEmail: true,
@@ -138,7 +126,6 @@ module.exports = checkSchema({
     errorMessage: "Digite um CPF válido",
     custom: {
       options: async (value, { req }) => {
-        console.log(req.body.cpf);
         if (
           (await User.findOne({
             where: {
@@ -161,7 +148,6 @@ module.exports = checkSchema({
     errorMessage: "Digite um CNPJválido",
     custom: {
       options: async (value, { req }) => {
-        console.log(req.body.cnpj);
         if (
           (await User.findOne({
             where: {
