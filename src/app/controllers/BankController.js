@@ -106,7 +106,7 @@ module.exports = {
     });
 
     if (bank != null) {
-      await bank.destroy({ where: { id: id } });
+      await bank.destroy({ where: { id } });
       return res.status(200).json(bank);
     }
     return res.status(400).json({ msg: `Erro ao Delatar Banco. ${err}` });
