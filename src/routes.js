@@ -53,26 +53,34 @@ routes.put("/user/:id", Auth.private, UserController.updateUser);
 routes.delete("/user/:id", Auth.private, UserController.deleteUser);
 
 // LAUNCHS
+
 routes.get("/launchs", Auth.private, LaunchController.getLaunchs);
+routes.get(
+  "/launch/:movement",
+  Auth.private,
+  LaunchController.getLaunchMovements
+);
+routes.post(
+  "/launch",
+  Auth.private,
+  LaunchValidator,
+  validationHandler,
+  LaunchController.insertLaunch
+);
+routes.put("/launc/:id", Auth.private, LaunchController.updateLaunch);
+routes.delete("/launch/:id", Auth.private, LaunchController.deleteLaunch);
 
 // CATEGORYS
 routes.get("/categorys", Auth.private, CategoryController.getCategors);
-
-//CLASSIFICATIONS
-routes.get(
-  "/classifications",
+routes.post(
+  "/category",
   Auth.private,
-  ClassificationController.getClassifications
+  CategoryValidator,
+  validationHandler,
+  CategoryController.insertCategory
 );
-// MOVEMENTS
-routes.get("/movements", Auth.private, MovementController.getMovements);
-
-//STATUS LAUNCHS
-routes.get(
-  "/status-launchs",
-  Auth.private,
-  StatusLaunchController.getStatusLaunchs
-);
+routes.put("/category/:id", Auth.private, CategoryController.updateCategory);
+routes.delete("/category/:id", Auth.private, CategoryController.deleteCategory);
 
 //BANK
 routes.get("/bank", Auth.private, BankController.getBanks);
@@ -89,35 +97,20 @@ routes.post(
 routes.put("/bank/:id", Auth.private, BankController.updateBank);
 routes.delete("/bank/:id", Auth.private, BankController.deleteBank);
 
-//CATEGORY
-
-routes.get("/category", Auth.private, CategoryController.getCategors);
-routes.post(
-  "/category",
-  Auth.private,
-  CategoryValidator,
-  validationHandler,
-  CategoryController.insertCategory
-);
-routes.put("/category/:id", Auth.private, CategoryController.updateCategory);
-routes.delete("/category/:id", Auth.private, CategoryController.deleteCategory);
-
-//LAUNCH
-routes.get("/launch", Auth.private, LaunchController.getLaunchs);
+//CLASSIFICATIONS
 routes.get(
-  "/launch/:movement",
+  "/classifications",
   Auth.private,
-  LaunchController.getLaunchMovements
+  ClassificationController.getClassifications
 );
+// MOVEMENTS
+routes.get("/movements", Auth.private, MovementController.getMovements);
 
-routes.post(
-  "/launch",
+//STATUS LAUNCHS
+routes.get(
+  "/status-launchs",
   Auth.private,
-  LaunchValidator,
-  validationHandler,
-  LaunchController.insertLaunch
+  StatusLaunchController.getStatusLaunchs
 );
-routes.put("/launc/:id", Auth.private, LaunchController.updateLaunch);
-routes.delete("/launch/:id", Auth.private, LaunchController.deleteLaunch);
 
 module.exports = routes;

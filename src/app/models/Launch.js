@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
+const Bank = require("./Bank");
 
 class Launch extends Model {
   static init(sequelize) {
@@ -49,6 +50,14 @@ class Launch extends Model {
         tableName: "launch",
       }
     );
+  }
+  static associate(models) {
+    this.belongsTo(models.Bank, {
+      foreignKey: "bank_id",
+    }),
+      this.belongsTo(models.Category, {
+        foreignKey: "category_id",
+      });
   }
 }
 

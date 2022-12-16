@@ -1,9 +1,12 @@
+const Bank = require("../models/Bank");
+const Category = require("../models/Category");
 const Launch = require("../models/Launch");
-const { getMovements } = require("./MovementController");
 
 module.exports = {
   async getLaunchs(req, res) {
-    const launchs = await Launch.findAll();
+    const launchs = await Launch.findAll({
+      include: [Bank, Category],
+    });
 
     try {
       return res.status(200).json(launchs);
@@ -15,14 +18,19 @@ module.exports = {
   async getLaunchMovements(req, res) {
     const { movement } = req.params;
 
-    const launchs = await Launch.findOne({ where: { movement: movement } });
+    const launch = await Launch.findAll({
+      where: {
+        movement: movement,
+      },
+    });
 
-    if (launchs != null) {
-      try {
-        return res.status(200).json(launchs);
-      } catch (err) {
-        return res.status(400).json({ msg: `Erro ao carregar os Lançamentos` });
-      }
+    if (launch === null) {
+      return res.status(200).json({ msg: `Lançamentos não encontradod.` });
+    }
+    try {
+      return res.status(200).json(launch);
+    } catch (err) {
+      return res.status(400).json({ msg: `Erro ao carregar os Lançamentos` });
     }
   },
 
@@ -38,7 +46,6 @@ module.exports = {
       launchVencimentDate,
       movement,
     } = req.body;
-    console.log(req.body);
 
     const launch = await Launch.create({
       description: description,

@@ -20,6 +20,11 @@ class Category extends Model {
       }
     );
   }
+  static associate(models) {
+    this.belongsTo(models.Launch, {
+      foreignKey: "id",
+    });
+  }
 }
 
 module.exports = Category;
