@@ -53,13 +53,7 @@ routes.put("/user/:id", Auth.private, UserController.updateUser);
 routes.delete("/user/:id", Auth.private, UserController.deleteUser);
 
 // LAUNCHS
-
 routes.get("/launchs", Auth.private, LaunchController.getLaunchs);
-routes.get(
-  "/launch/:movement",
-  Auth.private,
-  LaunchController.getLaunchMovements
-);
 routes.post(
   "/launch",
   Auth.private,
@@ -67,7 +61,7 @@ routes.post(
   validationHandler,
   LaunchController.insertLaunch
 );
-routes.put("/launc/:id", Auth.private, LaunchController.updateLaunch);
+routes.put("/launch/:id", Auth.private, LaunchController.updateLaunch);
 routes.delete("/launch/:id", Auth.private, LaunchController.deleteLaunch);
 
 // CATEGORYS
@@ -103,6 +97,7 @@ routes.get(
   Auth.private,
   ClassificationController.getClassifications
 );
+
 // MOVEMENTS
 routes.get("/movements", Auth.private, MovementController.getMovements);
 
