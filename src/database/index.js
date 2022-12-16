@@ -23,4 +23,8 @@ Classification.init(connection);
 Movement.init(connection);
 StatusLaunch.init(connection);
 
+Bank.associate(connection.models);
+Launch.associate(connection.models);
+Category.associate(connection.models);
+
 module.exports = connection;

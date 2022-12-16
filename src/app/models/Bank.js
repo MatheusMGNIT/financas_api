@@ -36,6 +36,11 @@ class Bank extends Model {
       }
     );
   }
+  static associate(models) {
+    this.belongsTo(models.Launch, {
+      foreignKey: "id",
+    });
+  }
 }
 
 module.exports = Bank;
