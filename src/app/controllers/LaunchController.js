@@ -7,14 +7,14 @@ module.exports = {
     const { movement } = req.query;
 
     let launchs;
-    if(movement) {
+    if (movement) {
       launchs = await Launch.findAll({
         include: [Bank, Category],
-        where: { movement: Number(movement) }
+        where: { movement: Number(movement) },
       });
     } else {
       launchs = await Launch.findAll({
-        include: [Bank, Category]
+        include: [Bank, Category],
       });
     }
 
@@ -76,7 +76,7 @@ module.exports = {
 
     try {
       if (launch != null) {
-        launch = await Launch.update({
+        await launch.update({
           description: description,
           category_id: category,
           classification_id: classification,
@@ -87,11 +87,13 @@ module.exports = {
           date_venciment: launchVenciment,
           movement: movement,
         });
-  
+
         return res.status(200).json(launch);
       }
-    } catch(err) {
-      return res.status(200).json({ msg: `Erro ao Atualizar Lançamento ${err}` });
+    } catch (err) {
+      return res
+        .status(200)
+        .json({ msg: `Erro ao Atualizar Lançamento ${err}` });
     }
   },
 
