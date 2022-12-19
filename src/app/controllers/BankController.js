@@ -39,6 +39,7 @@ module.exports = {
       type_account,
       agency,
       n_account,
+      date_invoice,
     } = req.body;
 
     const bank = Bank.create({
@@ -48,6 +49,7 @@ module.exports = {
       type_account,
       agency,
       n_account,
+      date_invoice,
     });
 
     try {
@@ -67,6 +69,7 @@ module.exports = {
       type_account,
       agency,
       n_account,
+      date_invoice,
     } = req.body;
 
     let bank = await Bank.findOne({
@@ -83,6 +86,7 @@ module.exports = {
         type_account,
         agency,
         n_account,
+        date_invoice,
       });
       bank = await Bank.findOne({ where: { id: id } });
 

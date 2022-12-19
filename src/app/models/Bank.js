@@ -22,12 +22,14 @@ class Bank extends Model {
         type_account: {
           type: DataTypes.STRING,
         },
-
         agency: {
           type: DataTypes.STRING,
         },
         n_account: {
           type: DataTypes.STRING,
+        },
+        date_invoice: {
+          type: DataTypes.DATE,
         },
       },
       {

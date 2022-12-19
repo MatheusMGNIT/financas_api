@@ -26,6 +26,9 @@ module.exports = {
       n_account: {
         type: Sequelize.STRING,
       },
+      date_invoice: {
+        type: Sequelize.DATE,
+      },
       created_at: {
         type: Sequelize.DATE,
       },

@@ -18,6 +18,7 @@ const MovementController = require("./app/controllers/MovementController");
 const StatusLaunchController = require("./app/controllers/StatusLaunchController");
 const CategoryValidator = require("./validators/CategoryValidator");
 const LaunchValidator = require("./validators/LaunchValidator");
+const BalanceController = require("./app/controllers/BalanceController");
 
 const routes = express.Router();
 
@@ -63,6 +64,12 @@ routes.post(
 );
 routes.put("/launch/:id", Auth.private, LaunchController.updateLaunch);
 routes.delete("/launch/:id", Auth.private, LaunchController.deleteLaunch);
+
+// BALANCE
+
+routes.get("/balance-month", BalanceController.getBalanceMonth);
+routes.get("/balance-revenue", BalanceController.getRevenue);
+routes.get("/balance-expense", BalanceController.getExpense);
 
 // CATEGORYS
 routes.get("/categorys", Auth.private, CategoryController.getCategors);
