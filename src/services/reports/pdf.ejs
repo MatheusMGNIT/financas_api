@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Layout</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+      integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+      body {
+        margin: 0;
+        font-family: "Roboto", sans-serif;
+      }
+
+      .geral hr {
+        margin: auto;
+        max-width: 1024px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .icone {
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;
+      }
+      .borda-topo {
+        display: flex;
+        max-width: 1024px;
+        border: 0.5px solid #002f6d;
+        margin: auto;
+      }
+      .container {
+        margin: auto;
+        display: flex;
+        max-width: 800px;
+        align-items: center;
+        justify-content: space-around;
+        margin: 20px 0px 0px 0px;
+      }
+      .area-names {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 15px;
+      }
+      .names {
+        color: #002f6d;
+        font-weight: bold;
+        font-size: 20px;
+      }
+      .data-table {
+        margin: auto;
+      }
+      .table-cabeca {
+        background-color: #002f6d;
+        color: white;
+        padding: 20px;
+      }
+      .table-corpo {
+        display: flex;
+        background: transparent;
+        padding: 20px;
+        margin: auto;
+        width: inherit;
+        column-gap: 40px;
+      }
+      .tabela {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+      }
+      .valor1 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: auto;
+        width: 50%;
+        margin-top: 20px;
+      }
+      .valor2 {
+        font-size: 20px;
+        padding: 10px 20px 10px 20px;
+        background-color: #002f6d;
+        color: white;
+        width: 100%;
+      }
+      .valor3 {
+        display: flex;
+        padding: 8px;
+        font-size: 20px;
+        justify-content: space-around;
+        align-items: center;
+        border-top: 2px solid #002f6d;
+        border-bottom: 2px solid #002f6d;
+        width: 100%;
+      }
+      table {
+        margin: auto;
+        max-width: 750px;
+        border-left: none;
+        border-collapse: collapse;
+      }
+      table th {
+        font-size: 20px;
+        padding: 15px;
+      }
+      table td {
+        text-align: center;
+        font-size: 18px;
+        padding: 10px;
+        border-bottom: 3px solid #145da0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="geral">
+      <div class="icone">
+        <div style="font-size: 80px; font-weight: bold; color: #002f6d">
+          SUA EMPRESA
+        </div>
+        <div style="font-size: 30px; color: #ababab">seguimento da empresa</div>
+      </div>
+      <div class="borda-topo"></div>
+      <div class="container">
+        <div class="area-names">
+          <div class="names">Nome:</div>
+          <div style="font-size: 18px"></div>
+        </div>
+        <div class="area-names">
+          <div class="names">Data:</div>
+          <div style="font-size: 18px"></div>
+        </div>
+        <div class="area-names">
+          <div class="names">Periodo:</div>
+          <div style="font-size: 18px">
+            <!-- <%=data_final%> ate <%=data_inicio%> -->
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
+
+      <div
+        style="
+          font-size: 25px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: auto;
+          margin-bottom: 10px;
+          font-weight: bold;
+        "
+      >
+        <!-- Relatório de <%=type==1?'Pagamentos': 'Recebimentos'%> <%=status%> -->
+      </div>
+
+      <table class="data-table">
+        <thead class="table-cabeca">
+          <tr>
+            <th>Número de Financeiro</th>
+            <th>Data de Vencimento</th>
+            <th>Parceiro/Cliente</th>
+            <th>Natureza</th>
+            <th>Data de Emissão</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <% report.map(async element => {%>
+          <tr>
+            <td><%= element.id %></td>
+            <td><%= element.venciment_date %></td>
+            <td>
+              <%= element.name || element.corporate_name ? element.name ||
+              element.corporate_name : ""%>
+            </td>
+            <td><%= element.Natureza ? element.Natureza : "" %></td>
+            <td><%= element.emission_date %></td>
+            <td>R$ <%= element.value.toFixed(2) %></td>
+          </tr>
+          <% }) %> -->
+        </tbody>
+      </table>
+      <div class="valor1">
+        <!-- <div class="valor2">Valor a <%=type == 1 ? "Pagar" : "Receber" %></div> -->
+        <div class="valor3">
+          <div>Total</div>
+          <!-- R$ <%=report_total%> -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
