@@ -2,18 +2,22 @@ const { checkSchema } = require("express-validator");
 
 module.exports = checkSchema({
   description: {
+    isString: {
+      bail: true,
+    },
     notEmpty: {
       bail: true,
     },
-    errorMessage: "Digite o Nome da Categoria",
+    errorMessage: "Digite um nome válido",
   },
 
   date_launch: {
     notEmpty: {
       bail: true,
     },
-    errorMessage: "Selecione uma Data Válida",
+    errorMessage: "Selecione uma data válida",
   },
+
   category_id: {
     isInt: {
       bail: true,
@@ -21,13 +25,14 @@ module.exports = checkSchema({
     custom: {
       options: async (value) => {
         if (value == -1) {
-          return Promise.reject(new Error("Selecione uma Categoria "));
+          return Promise.reject(new Error("Selecione uma Categoria"));
         }
         return true;
       },
     },
     errorMessage: "Selecione um tipo válido",
   },
+
   classification_id: {
     isInt: {
       bail: true,
@@ -40,20 +45,23 @@ module.exports = checkSchema({
         return true;
       },
     },
-    errorMessage: "Selecione uma Classificação",
+    errorMessage: "Selecione uma classificação válida",
   },
+
   value: {
-    isFloat: {
+    notEmpty: {
       bail: true,
     },
-    errorMessage: "Digite um Valor",
+    errorMessage: "Digite um valor válido",
   },
+
   date_venciment: {
     notEmpty: {
       bail: true,
     },
-    errorMessage: "Selecione uma Data Válida",
+    errorMessage: "Selecione uma data válida",
   },
+
   status_launch_id: {
     isInt: {
       bail: true,
@@ -61,13 +69,14 @@ module.exports = checkSchema({
     custom: {
       options: async (value) => {
         if (value == -1) {
-          return Promise.reject(new Error("Selecione um Status"));
+          return Promise.reject(new Error("Selecione um status válido"));
         }
         return true;
       },
     },
-    errorMessage: "Selecione um Status",
+    errorMessage: "Selecione um status válido",
   },
+
   bank_id: {
     isInt: {
       bail: true,
@@ -75,11 +84,11 @@ module.exports = checkSchema({
     custom: {
       options: async (value) => {
         if (value == -1) {
-          return Promise.reject(new Error("Selecione um Banco"));
+          return Promise.reject(new Error("Selecione um banco válido"));
         }
         return true;
       },
     },
-    errorMessage: "Selecione um Banco",
+    errorMessage: "Selecione um banco válido",
   },
 });
