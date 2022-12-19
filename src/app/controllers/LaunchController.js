@@ -7,53 +7,55 @@ module.exports = {
     const { movement } = req.query;
 
     let launchs;
+    launchs = await Launch.findAll({
+      include: [Bank, Category],
+    });
+
     if (movement) {
       launchs = await Launch.findAll({
         include: [Bank, Category],
         where: { movement: Number(movement) },
-      });
-    } else {
-      launchs = await Launch.findAll({
-        include: [Bank, Category],
       });
     }
 
     try {
       return res.status(200).json(launchs);
     } catch (err) {
-      return res.status(400).json({ msg: `Erro ao carregar os Lançamentos` });
+      return res.status(400).json({ msg: `Erro ao carregar os Lançamentos. ${err}` });
     }
   },
 
   async insertLaunch(req, res) {
     const {
       description,
-      category,
-      classification,
-      bank,
+      category_id,
+      classification_id,
+      bank_id,
       value,
-      status,
-      launchDate,
-      launchVencimentDate,
-      movement,
+      status_launch_id,
+      date_launch,
+      date_venciment,
+      movement
     } = req.body;
+    
+    let newValue = value && value.replace(',', '.');
 
     const launch = await Launch.create({
-      description: description,
-      category_id: category,
-      classification_id: classification,
-      bank_id: bank,
-      value: value,
-      status_launch_id: status,
-      date_launch: launchDate,
-      date_venciment: launchVencimentDate,
-      movement: movement,
+      description,
+      category_id,
+      classification_id,
+      bank_id,
+      value: Number(newValue),
+      status_launch_id,
+      date_launch,
+      date_venciment,
+      movement,
     });
 
     try {
       return res.status(200).json(launch);
     } catch (err) {
-      return res.status(400).json({ msg: `Erro ao Cadastrar Lançamento ` });
+      return res.status(400).json({ msg: `Erro ao Cadastrar Lançamento. ${err}` });
     }
   },
 
@@ -72,8 +74,9 @@ module.exports = {
       movement,
     } = req.body;
 
+    let newValue = value && value.replace(',', '.');
     let launch = await Launch.findOne({ where: { id: id } });
-
+    
     try {
       if (launch != null) {
         await launch.update({
@@ -81,7 +84,7 @@ module.exports = {
           category_id: category,
           classification_id: classification,
           bank_id: bank,
-          value: value,
+          value: Number(newValue),
           status_launch_id: status,
           date_launch: launchDate,
           date_venciment: launchVenciment,
@@ -108,7 +111,7 @@ module.exports = {
       try {
         return res.status(200).json(launch);
       } catch (err) {
-        return res.status(400).json({ msg: `Erro ao Excluir Lançamento` });
+        return res.status(400).json({ msg: `Erro ao Excluir Lançamento. ${err}` });
       }
     }
   },

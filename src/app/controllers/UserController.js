@@ -140,16 +140,21 @@ module.exports = {
       phone_type,
       phone,
       person_type,
+      password,
+      confirmPassword
     } = req.body;
+    let user = await User.findOne({ where: { id } });
 
-    let user = await User.findOne({
-      where: {
-        id: id,
-      },
-    });
+    let passwordHash;
+    if(password && confirmPassword) {
+      if(password !== confirmPassword) {
+        return res.status(404).json({ msg: "Senhas não coincidem!" });
+      }
+      passwordHash = await bcrypt.hash(password, 10);
+    }
+    
 
     if (user != null) {
-      // SE FOR ADMIN
       await user.update({
         id_user_type,
         name,
@@ -161,11 +166,11 @@ module.exports = {
         phone_type,
         phone,
         person_type,
+        password_hash: passwordHash,
       });
-      user = await User.findOne({ where: { id: id } });
-      return res.status(200).json({
-        user,
-      });
+      (await user).save;
+
+      return res.status(200).json({ user });
     }
     return res.status(404).json({ msg: "Usuário nao encontrado." });
   },
