@@ -68,8 +68,6 @@ routes.delete("/launch/:id", Auth.private, LaunchController.deleteLaunch);
 // BALANCE
 
 routes.get("/balance-month", BalanceController.getBalanceMonth);
-routes.get("/balance-revenue", BalanceController.getRevenue);
-routes.get("/balance-expense", BalanceController.getExpense);
 
 // CATEGORYS
 routes.get("/categorys", Auth.private, CategoryController.getCategors);
