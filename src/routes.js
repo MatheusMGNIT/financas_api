@@ -68,6 +68,11 @@ routes.delete("/launch/:id", Auth.private, LaunchController.deleteLaunch);
 // BALANCE
 
 routes.get("/balance-month", BalanceController.getBalanceMonth);
+routes.get(
+  "/download",
+  // Auth.private,
+  BalanceController.donwnloadPdfBalance
+);
 
 // CATEGORYS
 routes.get("/categorys", Auth.private, CategoryController.getCategors);
