@@ -1,6 +1,7 @@
 const connection = require("../../database/index");
 const moment = require("moment");
 const puppeteer = require("puppeteer");
+const User = require("../models/User");
 const { GenerateReport } = require("../../services/GenerateReport");
 
 module.exports = {
@@ -88,6 +89,13 @@ module.exports = {
   },
 
   async donwnloadPdfBalance(req, res) {
+    const uuid = req.headers.token;
+
+    const user = await User.findOne({
+      where: { token: uuid },
+      attributes: ["name", "last_name"],
+    });
+
     const mes = 11;
     const [primaryDay] = await connection.query(`
     select generate_series ( '2022-01-01'::timestamp, '2022-12-01'::timestamp, '1 month'::interval) as "day1";
@@ -124,12 +132,17 @@ module.exports = {
     const dataFinal = moment(formatedDay[mes].final).format();
 
     const [balanceMonth] = await connection.query(
-      `select * ,
-        (select sum(value) from launch l where  movement = 1) as receitas ,
-        (select sum(value) from launch l where  movement = 2) as despesas
-        from launch l 
-        where date_launch between '${dataInicio}' and '${dataFinal}' 
-        group by 1
+      `select
+      l.*, b.name_bank as banco,  c.description as categoria , c2.description as classificacao, sl.description as status,
+      (select sum(value) from launch l where  movement = 1) as receitas ,
+      (select sum(value) from launch l where  movement = 2) as despesas
+      from launch l 
+      left join bank b on b.id = l.bank_id 
+      left join category c on c.id = l.category_id 
+      left join classification c2 on c2.id = l.classification_id 
+      left join status_launch sl on sl.id = l.status_launch_id  
+      where date_launch between '${dataInicio}' and '${dataFinal}' 
+      group by b.name_bank, l.id, b.id, c.id, c2.id, sl.description 
         `
     );
 
@@ -138,14 +151,14 @@ module.exports = {
       data = balanceMonth.map((element) => {
         return {
           descricao: element.description,
-          data_inicial: element.date_launch,
-          movimentacao: element.movement,
-          categoria: element.category_id,
-          classificao: element.classification_id,
+          data_inicial: moment(element.date_launch).format("DD/MM/yyyy"),
+          movimentacao: element.movement == 1 ? "Receita" : "Despesa",
+          categoria: element.categoria,
+          classificacao: element.classificacao,
           valor: element.value,
-          data_vencimento: element.date_venciment,
-          status: element.status_launch_id,
-          banco: element.bank_id,
+          data_vencimento: moment(element.date_venciment).format("DD/MM/yyyy"),
+          status: element.status,
+          banco: element.banco,
         };
       });
       [receita] = balanceMonth.map((element) => {
@@ -162,10 +175,11 @@ module.exports = {
     try {
       const html = await GenerateReport({
         data: {
-          // data: data,
+          launchs: data,
           receita: receita,
           despesa: despesa,
           saldo: saldo,
+          user: `${user.name} ${user.last_name}`,
         },
         MailBody: "pdf.ejs",
       });

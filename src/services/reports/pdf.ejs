@@ -128,25 +128,15 @@
     <div class="geral">
       <div class="icone">
         <div style="font-size: 80px; font-weight: bold; color: #002f6d">
-          SUA EMPRESA
+          My Finance
         </div>
-        <div style="font-size: 30px; color: #ababab">seguimento da empresa</div>
+        <div style="font-size: 30px; color: #ababab">Meu Financeiro</div>
       </div>
       <div class="borda-topo"></div>
       <div class="container">
         <div class="area-names">
-          <!-- <div class="names">Nome:</div> -->
-          <div style="font-size: 18px"></div>
-        </div>
-        <div class="area-names">
-          <!-- <div class="names">Data:</div> -->
-          <div style="font-size: 18px"></div>
-        </div>
-        <div class="area-names">
-          <!-- <div class="names">Periodo:</div> -->
-          <div style="font-size: 18px">
-            <!-- <%=data_final%> ate <%=data_inicio%> -->
-          </div>
+          <div class="names">Nome:</div>
+          <div style="font-size: 18px"><%=user%></div>
         </div>
       </div>
       <br />
@@ -162,42 +152,57 @@
           margin-bottom: 10px;
           font-weight: bold;
         "
-      >
-        <!-- Relatório de <%=type==1?'Pagamentos': 'Recebimentos'%> <%=status%> -->
-      </div>
+      ></div>
 
       <table class="data-table">
         <thead class="table-cabeca">
           <tr>
-            <th>Número de Financeiro</th>
-            <th>Data de Vencimento</th>
-            <th>Parceiro/Cliente</th>
-            <th>Natureza</th>
-            <th>Data de Emissão</th>
-            <th>Subtotal</th>
+            <th>Descrição</th>
+            <th>Data de Lançamento</th>
+            <th>Movimentação</th>
+            <th>Categoria</th>
+            <th>Classificação</th>
+            <th>Valor</th>
+            <th>Date de Vencimento</th>
+            <th>Status</th>
+            <th>Banco</th>
           </tr>
         </thead>
         <tbody>
-          <!-- <% report.map(async element => {%>
+          <% launchs.map(async element => {%>
           <tr>
-            <td><%= element.id %></td>
-            <td><%= element.venciment_date %></td>
-            <td>
-              <%= element.name || element.corporate_name ? element.name ||
-              element.corporate_name : ""%>
-            </td>
-            <td><%= element.Natureza ? element.Natureza : "" %></td>
-            <td><%= element.emission_date %></td>
-            <td>R$ <%= element.value.toFixed(2) %></td>
+            <td><%= element.descricao%></td>
+            <td><%= element.data_inicial%></td>
+            <td><%= element.movimentacao%></td>
+            <td><%= element.categoria%></td>
+            <td><%= element.classificacao%></td>
+            <td><%= element.valor%></td>
+            <td><%= element.data_vencimento%></td>
+            <td><%= element.status%></td>
+            <td><%= element.banco%></td>
           </tr>
-          <% }) %> -->
+          <% }) %>
         </tbody>
       </table>
       <div class="valor1">
-        <!-- <div class="valor2">Valor a <%=type == 1 ? "Pagar" : "Receber" %></div> -->
+        <div class="valor2">Receita</div>
         <div class="valor3">
           <div>Total</div>
-          <!-- R$ <%=report_total%> -->
+          R$ <%=despesa ? receita.toFixed(2) : " 0.00 "%>
+        </div>
+      </div>
+      <div class="valor1">
+        <div class="valor2">Despesas</div>
+        <div class="valor3">
+          <div>Total</div>
+          R$ <%=despesa ? despesa.toFixed(2) : " 0.00 "%>
+        </div>
+      </div>
+      <div class="valor1">
+        <div class="valor2">Saldo</div>
+        <div class="valor3">
+          <div>Saldo</div>
+          R$ <%=saldo%>
         </div>
       </div>
     </div>
