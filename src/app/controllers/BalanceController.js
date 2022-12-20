@@ -6,13 +6,15 @@ const { GenerateReport } = require("../../services/GenerateReport");
 
 module.exports = {
   async getBalanceMonth(req, res) {
-    const mes = 11;
-    const [primaryDay] = await connection.query(`
-    select generate_series ( '2022-01-01'::timestamp, '2022-12-01'::timestamp, '1 month'::interval) as "day1";
-    `);
+    const { month, dateStart, dateEnd } = req.query;
 
+    const mes = Number(month);
+
+    const [primaryDay] = await connection.query(`
+      select generate_series ( '2022-01-01'::timestamp, '2022-12-01'::timestamp, '1 month'::interval) as "day1";
+    `);
     const [lastDay] = await connection.query(`
-    select (date_trunc('month', generate_series ( '2022-01-01'::timestamp, '2022-12-01'::timestamp, '1 month'::interval)) + interval '1 month' - interval '1 day') as "lastDay"
+      select (date_trunc('month', generate_series ( '2022-01-01'::timestamp, '2022-12-01'::timestamp, '1 month'::interval)) + interval '1 month' - interval '1 day') as "lastDay"
     `);
 
     const formatedDay1 = primaryDay.map((element, index) => {
@@ -38,17 +40,47 @@ module.exports = {
       });
     });
 
-    const dataInicio = moment(formatedDay[mes].inicio).format();
-    const dataFinal = moment(formatedDay[mes].final).format();
+    // MONTH
+    let dataInicio, dataFinal;
+    if(mes !== 'null') {
+      if(mes !== undefined) {
+        dataInicio = moment(formatedDay[mes].inicio).format();
+        dataFinal = moment(formatedDay[mes].final).format();
+      }
+    }
+    // DATE
+    let dataStart, dataEnd;
+    if(dateStart !== 'null' && dateEnd !== 'null') {
+      dataStart = moment(dateStart).format();
+      dataEnd = moment(dateEnd).format();
+    }
+
+    let dateQuery = '';
+    let monthQuery = '';
+
+    if(mes !== 'null') {
+      if(mes !== undefined) {
+        monthQuery = `where date_launch between '${dataInicio}' and '${dataFinal}'`;
+      };
+    };
+    if(dateStart !== 'null' && dateEnd !== 'null') {
+      dateQuery = `where date_launch between '${dataStart}' and '${dataEnd}'`;
+    };
+
+    console.log("req.query", req.query)
+    console.log("dateStart", dataStart)
+    console.log("dateEnd", dataEnd)
 
     const [balanceMonth] = await connection.query(
       `select * ,
-        (select sum(value) from launch l where  movement = 1) as receitas ,
-        (select sum(value) from launch l where  movement = 2) as despesas
-        from launch l 
-        where date_launch between '${dataInicio}' and '${dataFinal}' 
-        group by 1
-        `
+      (select sum(value) from launch where movement = 1) as receitas,
+      (select sum(value) from launch where movement = 2) as despesas
+      from launch ` + 
+      dateQuery + 
+      `` + 
+      monthQuery + 
+      `` + 
+      ` group by 1`
     );
 
     let data, receita, despesa;

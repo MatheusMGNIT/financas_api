@@ -17,7 +17,6 @@
         margin: 0;
         font-family: "Roboto", sans-serif;
       }
-
       .geral hr {
         margin: auto;
         max-width: 1024px;
@@ -38,7 +37,7 @@
       .borda-topo {
         display: flex;
         max-width: 1024px;
-        border: 0.5px solid #002f6d;
+        border: 0.5px solid rgb(114,54,202);
         margin: auto;
       }
       .container {
@@ -56,7 +55,7 @@
         column-gap: 15px;
       }
       .names {
-        color: #002f6d;
+        color: rgb(114,54,202);
         font-weight: bold;
         font-size: 20px;
       }
@@ -64,7 +63,7 @@
         margin: auto;
       }
       .table-cabeca {
-        background-color: #002f6d;
+        background-color: rgb(39, 44, 48);
         color: white;
         padding: 20px;
       }
@@ -92,7 +91,7 @@
       .valor2 {
         font-size: 20px;
         padding: 10px 20px 10px 20px;
-        background-color: #002f6d;
+        background-color: rgb(114,54,202);
         color: white;
         width: 100%;
       }
@@ -102,8 +101,8 @@
         font-size: 20px;
         justify-content: space-around;
         align-items: center;
-        border-top: 2px solid #002f6d;
-        border-bottom: 2px solid #002f6d;
+        border-top: 2px solid rgb(114,54,202);
+        border-bottom: 2px solid rgb(114,54,202);
         width: 100%;
       }
       table {
@@ -120,14 +119,14 @@
         text-align: center;
         font-size: 18px;
         padding: 10px;
-        border-bottom: 3px solid #145da0;
+        border-bottom: 1px solid rgb(39, 44, 48);
       }
     </style>
   </head>
   <body>
     <div class="geral">
       <div class="icone">
-        <div style="font-size: 80px; font-weight: bold; color: #002f6d">
+        <div style="font-size: 80px; font-weight: bold; color: rgb(114,54,202)">
           My Finance
         </div>
         <div style="font-size: 30px; color: #ababab">Meu Financeiro</div>
@@ -169,17 +168,17 @@
           </tr>
         </thead>
         <tbody>
-          <% launchs.map(async element => {%>
+          <% launchs.map(async element => { %>
           <tr>
-            <td><%= element.descricao%></td>
-            <td><%= element.data_inicial%></td>
-            <td><%= element.movimentacao%></td>
-            <td><%= element.categoria%></td>
-            <td><%= element.classificacao%></td>
-            <td><%= element.valor%></td>
-            <td><%= element.data_vencimento%></td>
-            <td><%= element.status%></td>
-            <td><%= element.banco%></td>
+            <td><%=element.descricao%></td>
+            <td><%=element.data_inicial%></td>
+            <td><%=element.movimentacao%></td>
+            <td><%=element.categoria%></td>
+            <td><%=element.classificacao%></td>
+            <td><%=element.valor%></td>
+            <td><%=element.data_vencimento%></td>
+            <td><%=element.status%></td>
+            <td><%=element.banco%></td>
           </tr>
           <% }) %>
         </tbody>
