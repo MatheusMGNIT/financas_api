@@ -1,7 +1,7 @@
 const connection = require("../../database/index");
 const moment = require("moment");
 const puppeteer = require("puppeteer");
-const { default: GenerateReport } = require("../../services/GenerateReport");
+const { GenerateReport } = require("../../services/GenerateReport");
 
 module.exports = {
   async getBalanceMonth(req, res) {
@@ -158,13 +158,14 @@ module.exports = {
     }
 
     const saldo = receita - despesa;
+
     try {
       const html = await GenerateReport({
         data: {
+          // data: data,
           receita: receita,
           despesa: despesa,
           saldo: saldo,
-          data_atual: format(new Date(), "dd/MM/yyyy"),
         },
         MailBody: "pdf.ejs",
       });
