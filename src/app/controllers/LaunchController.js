@@ -74,8 +74,12 @@ module.exports = {
       movement,
     } = req.body;
 
-    let newValue = value && value.replace(',', '.');
+    let newValue = value;
     let launch = await Launch.findOne({ where: { id: id } });
+
+    if(launch.value != newValue) {
+      newValue = value.replace(',', '.');
+    }
     
     try {
       if (launch != null) {
