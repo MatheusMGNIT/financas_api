@@ -8,8 +8,6 @@ module.exports = {
   async getBalanceMonth(req, res) {
     const { month, dateStart, dateEnd } = req.query;
 
-    console.log(moment(dateEnd).format(), "DATA FINAL");
-
     const [primaryDay] = await connection.query(`
       select generate_series ( '2022-01-01'::timestamp, '2022-12-01'::timestamp, '1 month'::interval) as "day1";
     `);
@@ -49,48 +47,21 @@ module.exports = {
       if (mes) {
         let dataInicio = moment(formatedDay[mes].inicio).format();
         let dataFinal = moment(formatedDay[mes].final).format();
-
+        dateQuery = "";
         monthQuery = `where date_launch between '${dataInicio}' and '${dataFinal}'`;
       }
     }
 
-    if (dateStart && dateEnd != null) {
+    if (dateStart != "null" && dateEnd != "null") {
       let dataStart = moment(dateStart).format();
       let dataEnd = moment(dateEnd).format();
-      console.log(dataStart);
-
+      monthQuery = "";
       dateQuery = `where date_launch between '${dataStart}' and '${dataEnd}'`;
     }
 
-    // // MONTH
-    // let dataInicio, dataFinal;
-    // if (mes !== "null") {
-    //   if (mes !== undefined) {
-    //     dataInicio = moment(formatedDay[mes].inicio).format();
-    //     dataFinal = moment(formatedDay[mes].final).format();
-    //   }
-    // }
-    // // DATE
-    // let dataStart, dataEnd;
-    // if (dateStart !== "null" && dateEnd !== "null") {
-    //   dataStart = moment(dateStart).format();
-    //   dataEnd = moment(dateEnd).format();
-    // }
-
-    // if (mes !== "null") {
-    //   if (mes !== undefined) {
-    //     monthQuery = `where date_launch between '${dataInicio}' and '${dataFinal}'`;
-    //   }
-    // }
-    // if (dateStart !== "null" && dateEnd !== "null") {
-    //   dateQuery = `where date_launch between '${dataStart}' and '${dataEnd}'`;
-    // }
-
     const [balanceMonth] = await connection.query(
       `select 
-        l.*, b.name_bank as banco,  c.description as categoria , c2.description as classificacao, sl.description as status,
-        (select sum(value) from launch l where  movement = 1) as receitas ,
-        (select sum(value) from launch l where  movement = 2) as despesas
+        l.*, b.name_bank as banco,  c.description as categoria , c2.description as classificacao, sl.description as status
         from launch l 
         left join bank b on b.id = l.bank_id  	
         left join category c on c.id = l.category_id 
@@ -104,7 +75,9 @@ module.exports = {
         ` group by b.name_bank, l.id, b.id, c.id, c2.id, sl.description `
     );
 
-    let data, receita, despesa;
+    let data;
+    let receitas = [];
+    let despesas = [];
     if (balanceMonth.length > 0) {
       data = balanceMonth.map((element) => {
         return {
@@ -123,14 +96,28 @@ module.exports = {
           banco: element.banco,
         };
       });
-      [receita] = balanceMonth.map((element) => {
-        return element.receitas;
+      receitas = balanceMonth.filter((element) => {
+        if (element.movement == 1) {
+          return element.value;
+        }
       });
-
-      [despesa] = balanceMonth.map((element) => {
-        return element.despesas;
+      despesas = balanceMonth.filter((element) => {
+        if (element.movement == 2) {
+          return element.value;
+        }
       });
     }
+
+    let valuesReceitas = receitas.map((element) => {
+      return element.value;
+    });
+
+    let valuesDespesas = despesas.map((element) => {
+      return element.value;
+    });
+
+    let receita = valuesReceitas.reduce((total, soma) => total + soma, 0);
+    let despesa = valuesDespesas.reduce((total, soma) => total + soma, 0);
 
     const saldo = receita - despesa;
 
