@@ -8,7 +8,7 @@ module.exports = {
   async getBalanceMonth(req, res) {
     const { month, dateStart, dateEnd } = req.query;
 
-    const mes = Number(month);
+    console.log(moment(dateEnd).format(), "DATA FINAL");
 
     const [primaryDay] = await connection.query(`
       select generate_series ( '2022-01-01'::timestamp, '2022-12-01'::timestamp, '1 month'::interval) as "day1";
@@ -40,47 +40,68 @@ module.exports = {
       });
     });
 
-    // MONTH
-    let dataInicio, dataFinal;
-    if(mes !== 'null') {
-      if(mes !== undefined) {
-        dataInicio = moment(formatedDay[mes].inicio).format();
-        dataFinal = moment(formatedDay[mes].final).format();
+    let dateQuery = "";
+    let monthQuery = "";
+
+    if (month != -1) {
+      const mes = Number(month);
+
+      if (mes) {
+        let dataInicio = moment(formatedDay[mes].inicio).format();
+        let dataFinal = moment(formatedDay[mes].final).format();
+
+        monthQuery = `where date_launch between '${dataInicio}' and '${dataFinal}'`;
       }
     }
-    // DATE
-    let dataStart, dataEnd;
-    if(dateStart !== 'null' && dateEnd !== 'null') {
-      dataStart = moment(dateStart).format();
-      dataEnd = moment(dateEnd).format();
+
+    if (dateStart && dateEnd != null) {
+      let dataStart = moment(dateStart).format();
+      let dataEnd = moment(dateEnd).format();
+      console.log(dataStart);
+
+      dateQuery = `where date_launch between '${dataStart}' and '${dataEnd}'`;
     }
 
-    let dateQuery = '';
-    let monthQuery = '';
+    // // MONTH
+    // let dataInicio, dataFinal;
+    // if (mes !== "null") {
+    //   if (mes !== undefined) {
+    //     dataInicio = moment(formatedDay[mes].inicio).format();
+    //     dataFinal = moment(formatedDay[mes].final).format();
+    //   }
+    // }
+    // // DATE
+    // let dataStart, dataEnd;
+    // if (dateStart !== "null" && dateEnd !== "null") {
+    //   dataStart = moment(dateStart).format();
+    //   dataEnd = moment(dateEnd).format();
+    // }
 
-    if(mes !== 'null') {
-      if(mes !== undefined) {
-        monthQuery = `where date_launch between '${dataInicio}' and '${dataFinal}'`;
-      };
-    };
-    if(dateStart !== 'null' && dateEnd !== 'null') {
-      dateQuery = `where date_launch between '${dataStart}' and '${dataEnd}'`;
-    };
-
-    console.log("req.query", req.query)
-    console.log("dateStart", dataStart)
-    console.log("dateEnd", dataEnd)
+    // if (mes !== "null") {
+    //   if (mes !== undefined) {
+    //     monthQuery = `where date_launch between '${dataInicio}' and '${dataFinal}'`;
+    //   }
+    // }
+    // if (dateStart !== "null" && dateEnd !== "null") {
+    //   dateQuery = `where date_launch between '${dataStart}' and '${dataEnd}'`;
+    // }
 
     const [balanceMonth] = await connection.query(
-      `select * ,
-      (select sum(value) from launch where movement = 1) as receitas,
-      (select sum(value) from launch where movement = 2) as despesas
-      from launch ` + 
-      dateQuery + 
-      `` + 
-      monthQuery + 
-      `` + 
-      ` group by 1`
+      `select 
+        l.*, b.name_bank as banco,  c.description as categoria , c2.description as classificacao, sl.description as status,
+        (select sum(value) from launch l where  movement = 1) as receitas ,
+        (select sum(value) from launch l where  movement = 2) as despesas
+        from launch l 
+        left join bank b on b.id = l.bank_id  	
+        left join category c on c.id = l.category_id 
+        left join classification c2 on c2.id = l.classification_id 
+        left join status_launch sl on sl.id = l.status_launch_id 
+        ` +
+        dateQuery +
+        `
+        ` +
+        monthQuery +
+        ` group by b.name_bank, l.id, b.id, c.id, c2.id, sl.description `
     );
 
     let data, receita, despesa;
@@ -88,14 +109,18 @@ module.exports = {
       data = balanceMonth.map((element) => {
         return {
           descricao: element.description,
-          data_inicial: element.date_launch,
-          movimentacao: element.movement,
-          categoria: element.category_id,
-          classificao: element.classification_id,
+          data_inicial: element.date_launch
+            ? moment(element.date_launch).format("DD/MM/yyyy")
+            : "",
+          movimentacao: element.movement == 1 ? "Receita" : "Despesa",
+          categoria: element.categoria,
+          classificacao: element.classificacao,
           valor: element.value,
-          data_vencimento: element.date_venciment,
+          data_vencimento: element.date_venciment
+            ? moment(element.date_venciment).format("DD/MM/yyyy")
+            : "",
           status: element.status_launch_id,
-          banco: element.bank_id,
+          banco: element.banco,
         };
       });
       [receita] = balanceMonth.map((element) => {
@@ -114,7 +139,7 @@ module.exports = {
         receita: receita ? receita : 0,
         despesa: despesa ? despesa : 0,
         saldo: saldo ? saldo : 0,
-        data: data ? data : [],
+        data: data,
       });
     }
     return res.status(400).json({ msg: "Saldos não encontrados!" });
