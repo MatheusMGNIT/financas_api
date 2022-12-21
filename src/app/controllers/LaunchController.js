@@ -1,31 +1,47 @@
 const Bank = require("../models/Bank");
 const Category = require("../models/Category");
 const Launch = require("../models/Launch");
+4;
+const User = require("../models/User");
 
 module.exports = {
   async getLaunchs(req, res) {
     const { movement } = req.query;
+    const uuid = req.headers.token;
+
+    const user = await User.findOne({
+      where: {
+        token: uuid,
+      },
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
 
     let launchs;
     launchs = await Launch.findAll({
+      where: { id_user: user.id },
       include: [Bank, Category],
     });
 
     if (movement) {
       launchs = await Launch.findAll({
         include: [Bank, Category],
-        where: { movement: Number(movement) },
+        where: { movement: Number(movement), id_user: user.id },
       });
     }
 
     try {
       return res.status(200).json(launchs);
     } catch (err) {
-      return res.status(400).json({ msg: `Erro ao carregar os Lançamentos. ${err}` });
+      return res
+        .status(400)
+        .json({ msg: `Erro ao carregar os Lançamentos. ${err}` });
     }
   },
 
   async insertLaunch(req, res) {
+    const uuid = req.headers.token;
     const {
       description,
       category_id,
@@ -35,10 +51,19 @@ module.exports = {
       status_launch_id,
       date_launch,
       date_venciment,
-      movement
+      movement,
     } = req.body;
-    
-    let newValue = value && value.replace(',', '.');
+
+    const user = await User.findOne({
+      where: {
+        token: uuid,
+      },
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
+
+    let newValue = value && value.replace(",", ".");
 
     const launch = await Launch.create({
       description,
@@ -50,12 +75,15 @@ module.exports = {
       date_launch,
       date_venciment,
       movement,
+      id_user: user.id,
     });
 
     try {
       return res.status(200).json(launch);
     } catch (err) {
-      return res.status(400).json({ msg: `Erro ao Cadastrar Lançamento. ${err}` });
+      return res
+        .status(400)
+        .json({ msg: `Erro ao Cadastrar Lançamento. ${err}` });
     }
   },
 
@@ -77,10 +105,10 @@ module.exports = {
     let newValue = value;
     let launch = await Launch.findOne({ where: { id: id } });
 
-    if(launch.value != newValue) {
-      newValue = value.replace(',', '.');
+    if (launch.value != newValue) {
+      newValue = value.replace(",", ".");
     }
-    
+
     try {
       if (launch != null) {
         await launch.update({
@@ -115,7 +143,9 @@ module.exports = {
       try {
         return res.status(200).json(launch);
       } catch (err) {
-        return res.status(400).json({ msg: `Erro ao Excluir Lançamento. ${err}` });
+        return res
+          .status(400)
+          .json({ msg: `Erro ao Excluir Lançamento. ${err}` });
       }
     }
   },

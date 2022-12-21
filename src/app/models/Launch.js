@@ -38,6 +38,9 @@ class Launch extends Model {
         bank_id: {
           type: DataTypes.INTEGER,
         },
+        id_user: {
+          type: DataTypes.INTEGER,
+        },
         created_at: {
           type: DataTypes.DATE,
         },

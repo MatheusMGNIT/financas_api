@@ -1,9 +1,20 @@
-const { where } = require("sequelize");
 const Category = require("../models/Category");
+const User = require("../models/User");
 
 module.exports = {
   async getCategors(req, res) {
+    const uuid = req.headers.token;
+
+    const user = await User.findOne({
+      where: {
+        token: uuid,
+      },
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
     const categorys = await Category.findAll({
+      where: { id_user: user.id },
       attributes: ["id", "description"],
     });
 
@@ -15,10 +26,21 @@ module.exports = {
   },
 
   async insertCategory(req, res) {
+    const uuid = req.headers.token;
     const { description } = req.body;
+
+    const user = await User.findOne({
+      where: {
+        token: uuid,
+      },
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
 
     const category = await Category.create({
       description,
+      id_user: user.id,
     });
 
     try {

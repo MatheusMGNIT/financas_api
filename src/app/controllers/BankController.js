@@ -1,7 +1,20 @@
 const Bank = require("../models/Bank");
+const User = require("../models/User");
 module.exports = {
   async getBanks(req, res) {
+    const uuid = req.headers.token;
+
+    const user = await User.findOne({
+      where: {
+        token: uuid,
+      },
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
+
     const bank = await Bank.findAll({
+      where: { id_user: user.id },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
@@ -16,6 +29,16 @@ module.exports = {
 
   async getBank(req, res) {
     const { id } = req.params;
+    const uuid = req.headers.token;
+
+    const user = await User.findOne({
+      where: {
+        token: uuid,
+      },
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
 
     const bank = await Bank.findOne({
       where: {
@@ -32,6 +55,7 @@ module.exports = {
     }
   },
   async insertBank(req, res) {
+    const uuid = req.headers.token;
     const {
       cod_bank,
       name_bank,
@@ -42,6 +66,15 @@ module.exports = {
       date_invoice,
     } = req.body;
 
+    const user = await User.findOne({
+      where: {
+        token: uuid,
+      },
+      attributes: {
+        exclude: ["password_hash", "token", "createdAt", "updatedAt"],
+      },
+    });
+
     const bank = Bank.create({
       cod_bank,
       name_bank,
@@ -50,6 +83,7 @@ module.exports = {
       agency,
       n_account,
       date_invoice,
+      id_user: user.id,
     });
 
     try {

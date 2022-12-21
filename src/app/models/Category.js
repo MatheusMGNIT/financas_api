@@ -13,6 +13,9 @@ class Category extends Model {
         description: {
           type: DataTypes.STRING,
         },
+        id_user: {
+          type: DataTypes.INTEGER,
+        },
       },
       {
         sequelize,

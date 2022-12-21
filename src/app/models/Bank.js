@@ -31,6 +31,9 @@ class Bank extends Model {
         date_invoice: {
           type: DataTypes.DATE,
         },
+        id_user: {
+          type: DataTypes.INTEGER,
+        },
       },
       {
         sequelize,
